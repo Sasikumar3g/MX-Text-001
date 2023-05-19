@@ -22,6 +22,11 @@ const obstacleTemplates = [
   // Add more templates as needed
 ];
 
+
+const loadingScreenImg = new Image();
+loadingScreenImg.src = 'assets/bg_l01.png';
+
+
 const frogImg = new Image();
 frogImg.src = "assets/frog.idl.svg";
 
@@ -82,7 +87,7 @@ let flies = [];
 let magicSlimePotions = [];
 let frameCount = 0;
 let score = 0;
-let gameSpeed = 2;
+let gameSpeed = 3;
 let gameOver = false;
 let startOverButtonCreated = false;
 
@@ -113,6 +118,39 @@ function playSound(audioElement) {
   // Play the audio file
   audioElement.play();
 }
+
+
+function drawPlayButton(ctx) {
+  ctx.fillStyle = '#ff0000'; // Choose a color for the button
+  ctx.fillRect(canvas.width / 2 - 50, canvas.height / 2 - 25, 100, 50); // Draw the button
+
+  ctx.font = '24px Arial';
+  ctx.fillStyle = '#ffffff'; // Choose a color for the text
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Play', canvas.width / 2, canvas.height / 2);
+}
+
+
+function drawLoadingScreen(ctx) {
+  ctx.drawImage(loadingScreenImg, 0, 0, canvas.width, canvas.height);
+  drawPlayButton(ctx);
+}
+
+
+let gameStarted = false;
+
+
+canvas.addEventListener('click', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  // Check if the click is within the Play button
+  if (x >= canvas.width / 2 - 50 && x <= canvas.width / 2 + 50 && y >= canvas.height / 2 - 25 && y <= canvas.height / 2 + 25) {
+    gameStarted = true;
+  }
+});
 
 
 
@@ -223,7 +261,7 @@ function catchFly() {
 
 function isLevelCompleted() {
   // level is completed when the score reaches xx number , 20 is only for testing 
-  return score >= currentLevel * 300;
+  return score >= currentLevel * 10;
 }
 
 
@@ -587,6 +625,12 @@ let level = 1;
 
 
 function update() {
+	
+	if (!gameStarted) {
+    drawLoadingScreen(ctx);
+    return;
+  }
+	
   frog.speed += frog.gravity;
   frog.y += frog.speed;
   frog.vy = frog.speed;
@@ -602,7 +646,7 @@ function update() {
   }
 
   // Calculate the speed multiplier based on the current level
-  const levelMultiplier = 1 + (level - 1) * 0.2;
+  const levelMultiplier = 1 + (level - 1) * 2;
 
   // Update base speeds based on the level
   baseObstacleSpeed = originalBaseObstacleSpeed * levelMultiplier;
@@ -616,7 +660,7 @@ function update() {
     createObstacle();
   }
 
-  if (frameCount % 75 === 0) {
+  if (frameCount % 50 === 0) {
     createFly();
   }
 
