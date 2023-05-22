@@ -223,7 +223,7 @@ function catchFly() {
 
 function isLevelCompleted() {
   // level is completed when the score reaches xx number , 20 is only for testing 
-  return score >= currentLevel * 500;
+  return score >= currentLevel * 20;
 }
 
 
@@ -468,7 +468,7 @@ function createFly() {
 }
 
 
-function spawnMagicSlimePotion() {
+/*function spawnMagicSlimePotion() {
   if (Math.random() < 0.0001) {
     createMagicSlimePotion();
   }
@@ -477,7 +477,7 @@ function spawnMagicSlimePotion() {
 const magicPotionSpawnInterval = setInterval(() => {
   spawnMagicSlimePotion();
 }, 10000); // Adjust this value to control how often the potion spawns.
-
+*/
 
 function createMagicSlimePotion() {
   const magicSlimePotion = {
@@ -684,7 +684,7 @@ function displayGameOver() {
 }
 
 
-
+/*
 function restartGame() {
   // Remove the "Start Over" button
   const gameContainer = document.getElementById("game-container");
@@ -712,7 +712,7 @@ function restartGame() {
 
   // Start the game loop again
   update();
-}
+}*/
 
 draw();
 update();
