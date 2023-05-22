@@ -22,31 +22,26 @@ const obstacleTemplates = [
   // Add more templates as needed
 ];
 
-
-const loadingScreenImg = new Image();
-loadingScreenImg.src = 'assets/bg_l01.png';
-
-
 const frogImg = new Image();
-frogImg.src = "assets/frog.idl.svg";
+frogImg.src = "assets/frog.idl.png";
 
 const frogUpImg = new Image();
-frogUpImg.src = "assets/frog.idl_up.svg";
+frogUpImg.src = "assets/frog.idl_up.png";
 
 const frogDownImg = new Image();
-frogDownImg.src = "assets/frog.idl_dn.svg";
+frogDownImg.src = "assets/frog.idl_dn.png";
 
 let frogCatchImageLoaded = false;
 
 let frogCatchImg = new Image();
-frogCatchImg.src = "assets/frog.idl_c.svg";
+frogCatchImg.src = "assets/frog.idl_c.png";
 frogCatchImg.onload = function () {
   frogCatchImageLoaded = true;
 };
 
 
 let frogImageLoaded = false;
-frogImg.addEventListener("load", function() {
+frogImg.addEventListener("load", function() { 
   frogImageLoaded = true;
 });
 
@@ -65,12 +60,12 @@ const originalBaseMagicPotionSpeed = 2;
 
 for (let i = 1; i <= numFlyImages; i++) {
   const flyImg = new Image();
-  flyImg.src = `assets/fly${i}.svg`;
+  flyImg.src = `assets/fly${i}.png`;
   flyImages.push(flyImg);
 }
 
 const magicPotionImg = new Image();
-magicPotionImg.src = "assets/magic_potion.svg"; 
+magicPotionImg.src = "assets/magic_potion.png"; 
 
 // ignore all Gradients , coming from old verstion 
 
@@ -87,7 +82,7 @@ let flies = [];
 let magicSlimePotions = [];
 let frameCount = 0;
 let score = 0;
-let gameSpeed = 3;
+let gameSpeed = 2;
 let gameOver = false;
 let startOverButtonCreated = false;
 
@@ -118,39 +113,6 @@ function playSound(audioElement) {
   // Play the audio file
   audioElement.play();
 }
-
-
-function drawPlayButton(ctx) {
-  ctx.fillStyle = '#ff0000'; // Choose a color for the button
-  ctx.fillRect(canvas.width / 2 - 50, canvas.height / 2 - 25, 100, 50); // Draw the button
-
-  ctx.font = '24px Arial';
-  ctx.fillStyle = '#ffffff'; // Choose a color for the text
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('Play', canvas.width / 2, canvas.height / 2);
-}
-
-
-function drawLoadingScreen(ctx) {
-  ctx.drawImage(loadingScreenImg, 0, 0, canvas.width, canvas.height);
-  drawPlayButton(ctx);
-}
-
-
-let gameStarted = false;
-
-
-canvas.addEventListener('click', (e) => {
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-
-  // Check if the click is within the Play button
-  if (x >= canvas.width / 2 - 50 && x <= canvas.width / 2 + 50 && y >= canvas.height / 2 - 25 && y <= canvas.height / 2 + 25) {
-    gameStarted = true;
-  }
-});
 
 
 
@@ -222,7 +184,7 @@ function toggleSound() {
 
 async function updateBackgroundImage(level) {
   const newBackgroundImage = new Image();
-  newBackgroundImage.src = `assets/bg_l${level}.svg`;
+  newBackgroundImage.src = `assets/bg_l${level}.png`;
 
   await new Promise((resolve) => {
     newBackgroundImage.onload = () => {
@@ -253,7 +215,7 @@ function changeFrogImage(imageFile) {
 function catchFly() {
   const distance = Math.hypot(frog.x - fly.x, frog.y - fly.y);
   if (distance < 20) {
-    changeFrogImage("assets/frog.idl_c.svg");
+    changeFrogImage("assets/frog.idl_c.png");
     flyCaught = true;
   }
 }
@@ -261,7 +223,7 @@ function catchFly() {
 
 function isLevelCompleted() {
   // level is completed when the score reaches xx number , 20 is only for testing 
-  return score >= currentLevel * 10;
+  return score >= currentLevel * 500;
 }
 
 
@@ -625,12 +587,6 @@ let level = 1;
 
 
 function update() {
-	
-	if (!gameStarted) {
-    drawLoadingScreen(ctx);
-    return;
-  }
-	
   frog.speed += frog.gravity;
   frog.y += frog.speed;
   frog.vy = frog.speed;
@@ -646,7 +602,7 @@ function update() {
   }
 
   // Calculate the speed multiplier based on the current level
-  const levelMultiplier = 1 + (level - 1) * 2;
+  const levelMultiplier = 1 + (level - 1) * 0.4;
 
   // Update base speeds based on the level
   baseObstacleSpeed = originalBaseObstacleSpeed * levelMultiplier;
@@ -660,7 +616,7 @@ function update() {
     createObstacle();
   }
 
-  if (frameCount % 50 === 0) {
+  if (frameCount % 75 === 0) {
     createFly();
   }
 
@@ -705,12 +661,12 @@ function displayGameOver() {
 
     const gameOverText = document.createElement("div");
     gameOverText.classList.add("game-over-text");
-    gameOverText.innerHTML = "$MONG - GROW THE STACK<br />Game Over";
+    gameOverText.innerHTML = "Pizza Frenzy: Crypto Chaos <br/> pizza.marginx.io";
     gameOverContainer.appendChild(gameOverText);
 
     const scoreText = document.createElement("div");
     scoreText.classList.add("score-text");
-    scoreText.innerHTML = "games.marginx.io<br />Your Score: " + score;
+    scoreText.innerHTML = "Game Over<br />Your Score: " + score;
     gameOverContainer.appendChild(scoreText);
 
     const startOverButton = document.createElement("button");
